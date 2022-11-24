@@ -14,7 +14,7 @@
 import sys, os, requests
 
 # Upload, unpack and run each file
-def UploadUnpackAndRun(filename):
+def UploadUnpackAndRun(filename) -> str:
     with open(filename, 'rb') as f:
         return requests.post( \
             "https://api.any.run/v1/analysis",
