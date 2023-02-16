@@ -1,0 +1,14 @@
+{
+    "token": "",
+    "task_params": {
+        "env_os": "windows",
+        "env_bitness": 64,
+        "env_version": "7",
+        "env_type": "complete",
+        "opt_network_connect": false,
+        "opt_privacy_type": "bylink",
+        "obj_ext_startfolder": "desktop",
+        "obj_ext_elevateprompt": false,
+        "opt_timeout": 60
+    }
+}
