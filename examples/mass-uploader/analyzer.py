@@ -35,4 +35,4 @@ class SamplesAnalyzer:
                             f"\ntask link: https://app.any.run/tasks/{self.anyrun_client.get_last_task_uuid()}\n"
                         )
                     else:
-                        log.write(f"\n[-] failed to saved report for {filename}\n")
+                        log.write(f"\n[-] failed to save report for {filename}\n")
