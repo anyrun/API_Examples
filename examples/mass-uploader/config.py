@@ -41,7 +41,7 @@ class Config:
         if self.valid_config:
             return self.cfg_obj["token"]
         
-    def get_task_params(self) -> str:
+    def get_task_params(self) -> dict:
         if self.valid_config:
             return self.cfg_obj["task_params"]
 
