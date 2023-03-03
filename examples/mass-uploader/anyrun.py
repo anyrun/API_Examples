@@ -19,7 +19,8 @@ from enum import IntEnum
 class EResponseCode(IntEnum):
     OK = 200,
     TASK_FAILED = 422,
-    LIMITS_EXCEEDED = 429
+    LIMITS_EXCEEDED = 429,
+    TASK_DIDNT_STARTED = 500
 
 class AnyRunClient:
     REPORT_CHECK_DELAY = 10
@@ -50,6 +51,14 @@ class AnyRunClient:
                             "[!] error occuried while task "
                             "was running, no report available"
                         )
+                        return {'no_data': 'true'}
+                    
+        if response.status_code == EResponseCode.TASK_DIDNT_STARTED: # task failed to start?
+            if len(response.text) != 0:
+                api_resp = json.loads(response.text)
+                if "error" in api_resp and "message" in api_resp:
+                    if api_resp["error"] == True:
+                        print(f"[!] task didn't start: {api_resp['message']}")
                         return {'no_data': 'true'}
 
         if response.status_code == EResponseCode.OK: # everything's fine
