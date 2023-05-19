@@ -16,29 +16,26 @@
 
 import sys, os, requests, json
 
-# Upload, unpack and run each file
-def upload_unpack_run(filename: str) -> str:
-    with open(filename, 'rb') as f:
-        return requests.post( \
-            "https://api.any.run/v1/analysis",
-            files = {
-                'file': f.read()
-            },
-            headers = {
-                "Authorization": f"API-Key {os.environ['API_KEY']}"
-            },
-            data = {
-                "env_os": "windows",
-                "env_bitness": "64",
-                "env_version": "10",
-                "env_type": "complete",
-                "opt_privacy_type": "bylink",
-                "obj_ext_startfolder": "desktop",
+def scan_url(url: str) -> str:
+    return requests.post( \
+        "https://api.any.run/v1/analysis",
+        headers = {
+            "Authorization": f"API-Key {os.environ['API_KEY']}"
+        },
+        data = {
+            "env_os": "windows",
+            "env_bitness": "64",
+            "env_version": "10",
+            "env_type": "complete",
+            "opt_privacy_type": "bylink",
+            "opt_timeout": 120,
 
-                # all the magic happens here
-                "obj_ext_cmd": r"""powershell -c "Move-Item -Path %FILENAME% .\f.zip; mkdir C:\Users\admin\Desktop\f; &'C:\Program Files\WinRAR\WinRAR.exe' -p1234 x -ibck .\f.zip *.* .\f | Wait-Job; $files = Get-ChildItem -Recurse -Path "f"; foreach ($file in $files){&$file.FullName};"""
-            }
-        ).text
+            # URL scan options
+            "obj_type": "url",
+            "obj_ext_browser": "Google Chrome",
+            "obj_url": url
+        }
+    ).text
 
 def process_response(response):
     json_data = json.loads(response)
@@ -53,11 +50,11 @@ def process_response(response):
 
 def main() -> None:
     if len(sys.argv) < 2:
-        print ("[!] Usage example: python UploadUnpackAndRun.py filename.zip")
+        print ("[!] Usage example: python ScanURL.py https://www.microsoft.com")
         return
 
-    filename = sys.argv[1]
-    process_response(upload_unpack_run(filename))
+    url = sys.argv[1]
+    process_response(scan_url(url))
 
 if __name__ == "__main__":
     main()
